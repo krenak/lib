@@ -1,13 +1,9 @@
 /*
  * Test cases for lib/hexdump.c module.
  */
-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-
-#include <linux/init.h>
-#include <linux/kernel.h>
-#include <linux/module.h>
 #include <linux/random.h>
 #include <linux/string.h>
+#include <kunit/test.h>
 
 static const unsigned char data_b[] = {
 	'\xbe', '\x32', '\xdb', '\x7b', '\x0a', '\x18', '\x93', '\xb2',	/* 00 - 07 */
