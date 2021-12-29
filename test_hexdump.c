@@ -214,7 +214,8 @@ static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
 	} while (i++ < 3);
 }
 
-static int __init test_hexdump_init(void)
+static void test_hexdump_init(struct kunit *test)
+// static int __init test_hexdump_init(void)
 {
 	unsigned int i;
 	int rowsize;
@@ -239,14 +240,16 @@ static int __init test_hexdump_init(void)
 		pr_err("failed %u out of %u tests\n", failed_tests, total_tests);
 
 	return failed_tests ? -EINVAL : 0;
+	KUNIT_ASSERT_EQ_MSG(test, failed_tests, 0,
+			    "all %u tests passed\n", total_tests);
 }
 module_init(test_hexdump_init);
 
-static void __exit test_hexdump_exit(void)
-{
-	/* do nothing */
+static struct kunit_suite hexdump_test_suite = {
+	.name = "hexdump_tests",
+	.test_cases = hexdump_test_cases,
 }
-module_exit(test_hexdump_exit);
 
 MODULE_AUTHOR("Andy Shevchenko <andriy.shevchenko@linux.intel.com>");
 MODULE_LICENSE("Dual BSD/GPL");
+kunit_test_suite(hexdump_test_suite);
