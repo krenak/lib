@@ -234,14 +234,11 @@ static void test_hexdump_init(struct kunit *test)
 	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
 		test_hexdump_overflow_set(i, true);
 
-	if (failed_tests == 0)
-		pr_info("all %u tests passed\n", total_tests);
-	else
-		pr_err("failed %u out of %u tests\n", failed_tests, total_tests);
-
-	return failed_tests ? -EINVAL : 0;
 	KUNIT_ASSERT_EQ_MSG(test, failed_tests, 0,
 			    "all %u tests passed\n", total_tests);
+	KUNIT_ASSERT_NEQ_MSG(test, failed_tests, 0,
+			     "failed %u out of %u tests\n",
+			     failed_tests, total_tests);
 }
 module_init(test_hexdump_init);
 
