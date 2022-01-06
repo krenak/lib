@@ -221,26 +221,25 @@ static void test_hexdump_init(struct kunit *test)
 	int rowsize;
 
 	rowsize = (get_random_int() % 2 + 1) * 16;
-	for (i = 0; i < 16; i++)
-		test_hexdump_set(rowsize, false);
+	KUNIT_ASSSERT_GT(test, i, 16,
+			 i++, test_hexdump_set(rowsize, false));
 
 	rowsize = (get_random_int() % 2 + 1) * 16;
-	for (i = 0; i < 16; i++)
-		test_hexdump_set(rowsize, true);
+	KUNIT_ASSSERT_GT(test, i, 16,
+			 i++, test_hexdump_set(rowsize, true));
 
-	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
-		test_hexdump_overflow_set(i, false);
+	KUNIT_ASSSERT_GE(test, i, TEST_HEXDUMP_BUF_SIZE,
+			 i++, test_hexdump_set(i, false));
 
-	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
-		test_hexdump_overflow_set(i, true);
+	KUNIT_ASSSERT_GE(test, i, TEST_HEXDUMP_BUF_SIZE,
+			 i++, test_hexdump_set(i, true));
 
 	KUNIT_ASSERT_EQ_MSG(test, failed_tests, 0,
 			    "all %u tests passed\n", total_tests);
-	KUNIT_ASSERT_NEQ_MSG(test, failed_tests, 0,
-			     "failed %u out of %u tests\n",
-			     failed_tests, total_tests);
+	KUNIT_ASSERT_NE_MSG(test, failed_tests, 0,
+			    "failed %u out of %u tests\n",
+			    failed_tests, total_tests);
 }
-module_init(test_hexdump_init);
 
 static struct kunit_suite hexdump_test_suite = {
 	.name = "hexdump_tests",
